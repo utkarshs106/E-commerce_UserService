@@ -11,13 +11,11 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 
-    @Modifying
-    @Query(value = "INSERT INTO User (user_name, password, role_id) VALUES (:userName, :password, :role_id)", nativeQuery = true)
-    void save(@Param("userName") String userName, @Param("password") String password, @Param("role_id") int role_id);
-
     User save(User user);
 
     @Query(value = "Select id from roles where role_type = :role_type", nativeQuery = true)
     Integer findByRoleType(@Param("role_type") String role_type);
 
+   // User findByRoleName(String role_name);
+    User findByuserName(String username);
 }

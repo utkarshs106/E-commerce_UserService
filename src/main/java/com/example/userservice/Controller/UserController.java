@@ -24,7 +24,7 @@ public class UserController {
     @PostMapping("/login")
     public String Login(@RequestBody LoginDTO loginDTO) {
        System.out.println("hi");
-        return userService.login(loginDTO.getUsername(),key);
+        return userService.login(loginDTO.getUsername(),loginDTO.getPassword(),key);
     }
 
     @PostMapping("/generateToken")

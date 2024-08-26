@@ -19,4 +19,5 @@ public class User {
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "role_id", nullable = false)
     Roles Role;
+
 }
