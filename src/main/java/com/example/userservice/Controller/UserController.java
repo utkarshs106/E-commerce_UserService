@@ -5,6 +5,7 @@ import com.example.userservice.DTO.UserSignupDTO;
 import com.example.userservice.DTO.VerifyTokenDTO;
 import com.example.userservice.Service.UserService;
 import com.example.userservice.Model.User;
+import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,7 +34,7 @@ public class UserController {
     }
 
     @PostMapping("/verifyToken")
-    public String Register(@RequestBody VerifyTokenDTO verifyTokenDTO) {
+    public Claims Register(@RequestBody VerifyTokenDTO verifyTokenDTO) {
         return userService.verifyToken(verifyTokenDTO.getToken(),key);
     }
 }

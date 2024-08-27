@@ -4,6 +4,7 @@ import com.example.userservice.DTO.UserSignupDTO;
 import com.example.userservice.Repository.RoleRepository;
 import com.example.userservice.Repository.TokenRepository;
 import com.example.userservice.Repository.UserRepository;
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import com.example.userservice.Model.*;
@@ -12,6 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 
 @Service
 public class UserService {
@@ -62,8 +66,12 @@ public class UserService {
                 return t1.getToken();
             }else{
                 //Token is not present
+                Map<String, Object> map = new HashMap<>();
+                map.put("name",u1.getUserName());
+                map.put("role",u1.getRole().getRoleType());
                 String tokenString = Jwts.builder()
                         .setSubject(username)
+                        .setClaims(map)
                         .setExpiration(new Date(System.currentTimeMillis() + 86400000))
                         .signWith(SignatureAlgorithm.HS512, key)
                         .compact();
@@ -83,11 +91,11 @@ public class UserService {
 
     }
 
-    public String verifyToken(String token,String password){
-        return Jwts.parser()
-                .setSigningKey(password)
-                .parseClaimsJws(token)
-                .getBody()
-                .getSubject();
+        // this should return Name and roles from payload
+        public static Claims verifyToken(String token, String key) {
+            return Jwts.parser()
+                    .setSigningKey(key)
+                    .parseClaimsJws(token)
+                    .getBody();
     }
 }
