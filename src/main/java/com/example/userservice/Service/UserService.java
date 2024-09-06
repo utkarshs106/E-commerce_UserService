@@ -1,6 +1,8 @@
 package com.example.userservice.Service;
 
 import com.example.userservice.DTO.UserSignupDTO;
+import com.example.userservice.Exception.SmallPasswordException;
+import com.example.userservice.Exception.UserNotFoundException;
 import com.example.userservice.Repository.RoleRepository;
 import com.example.userservice.Repository.TokenRepository;
 import com.example.userservice.Repository.UserRepository;
@@ -12,6 +14,8 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -31,7 +35,7 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    @Transactional
+    @ExceptionHandler(SmallPasswordException.class)
     public User signup(String userName, String password, String roleType) {
         // Check if the role exists
         Roles role = roleRepository.findByRoleType(roleType);
@@ -42,18 +46,20 @@ public class UserService {
             role.setRoleType(roleType);
             roleRepository.save(role);
         }
-
+        if(password.length()<8){
+            throw new SmallPasswordException("Password must be at least 8 characters");
+        }
         String s1 = passwordEncoder.encode(password);
 
         User user = new User();
         user.setUserName(userName);
         user.setPassword(s1);
         user.setRole(role);
-
         return userRepository.save(user);
 
     }
 
+    @ExceptionHandler(UserNotFoundException.class)
     public String login(String username, String inputPassword,String key){
         User u1 = userRepository.findByuserName(username);
         System.out.println(u1.getPassword());
@@ -86,7 +92,7 @@ public class UserService {
 
         }
         else{
-            return "Invalid username or password";
+            throw new UserNotFoundException("User Do not exists");
         }
 
     }
