@@ -9,4 +9,7 @@ public interface RoleRepository extends JpaRepository<Roles, Long> {
     Roles findByRoleType(String name);
     Roles save(Roles roles);
     Boolean existsByRoleType(String name);
+
+    @Override
+    void deleteAll();
 }
