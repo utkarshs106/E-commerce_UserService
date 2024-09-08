@@ -38,7 +38,7 @@ public class UserController {
     }
 
     @PostMapping("/verifyToken")
-    public Claims Register(@RequestBody VerifyTokenDTO verifyTokenDTO) {
+    public Claims verifyToken(@RequestBody VerifyTokenDTO verifyTokenDTO) {
         return userService.verifyToken(verifyTokenDTO.getToken(),key);
     }
 }
