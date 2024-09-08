@@ -21,6 +21,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+@Transactional
 @Service
 public class UserService {
     @Autowired
@@ -82,7 +83,7 @@ public class UserService {
                         .signWith(SignatureAlgorithm.HS512, key)
                         .compact();
 
-                //creating new Token object and adding vaues
+                //creating new Token object and adding values
                 Token token = new Token();
                 token.setToken(tokenString);
                 token.setUser(u1);
